@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>MicDog Finance Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./app.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <header class="container">
+    <h1>MicDog Finance Tracker</h1>
+    <p>Controle simples de receitas e despesas, com resumo, filtros, gráfico e CSV.</p>
+  </header>
+
+  <section class="container grid-3 cards">
+    <div class="card">
+      <div class="muted">Receitas</div>
+      <div id="income" class="stat positive">0,00</div>
+    </div>
+    <div class="card">
+      <div class="muted">Despesas</div>
+      <div id="expense" class="stat negative">0,00</div>
+    </div>
+    <div class="card">
+      <div class="muted">Saldo</div>
+      <div id="balance" class="stat">0,00</div>
+    </div>
+  </section>
+
+  <section class="container filters">
+    <div class="row">
+      <label>De
+        <input type="date" id="from" />
+      </label>
+      <label>Até
+        <input type="date" id="to" />
+      </label>
+      <label>Categoria
+        <input type="text" id="category" placeholder="Ex: Alimentação" />
+      </label>
+      <label>Buscar
+        <input type="text" id="q" placeholder="Descrição, tag, conta..." />
+      </label>
+      <button id="btnFilter">Filtrar</button>
+      <button id="btnClear">Limpar</button>
+      <button id="btnExport">Exportar CSV</button>
+      <label class="import">
+        Importar CSV
+        <input type="file" id="importFile" accept=".csv" />
+      </label>
+    </div>
+  </section>
+
+  <section class="container">
+    <canvas id="chart" height="120"></canvas>
+  </section>
+
+  <section class="container">
+    <h2>Nova transação</h2>
+    <form id="formNew" class="grid-6">
+      <input type="date" name="date" required />
+      <input type="text" name="description" placeholder="Descrição" required />
+      <input type="text" name="category" placeholder="Categoria" required />
+      <input type="text" name="account" placeholder="Conta" required />
+      <input type="number" step="0.01" name="amount" placeholder="Valor (+ receita, - despesa)" required />
+      <input type="text" name="tags" placeholder="Tags (opcional)" />
+      <button type="submit">Adicionar</button>
+    </form>
+  </section>
+
+  <section class="container">
+    <h2>Transações</h2>
+    <div class="table-wrap">
+      <table id="tbl" class="table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Conta</th>
+            <th class="num">Valor</th>
+            <th>Tags</th>
+            <th class="actions">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <template id="row">
+    <tr>
+      <td data-k="date"></td>
+      <td data-k="description"></td>
+      <td data-k="category"></td>
+      <td data-k="account"></td>
+      <td data-k="amount" class="num"></td>
+      <td data-k="tags"></td>
+      <td class="actions">
+        <button data-act="edit">Editar</button>
+        <button data-act="del" class="danger">Excluir</button>
+      </td>
+    </tr>
+  </template>
+
+  <dialog id="dlgEdit">
+    <form method="dialog" id="formEdit" class="grid-6">
+      <h3>Editar transação</h3>
+      <input type="hidden" name="id" />
+      <input type="date" name="date" required />
+      <input type="text" name="description" placeholder="Descrição" required />
+      <input type="text" name="category" placeholder="Categoria" required />
+      <input type="text" name="account" placeholder="Conta" required />
+      <input type="number" step="0.01" name="amount" placeholder="Valor (+ receita, - despesa)" required />
+      <input type="text" name="tags" placeholder="Tags (opcional)" />
+      <menu>
+        <button type="submit">Salvar</button>
+        <button type="button" id="btnCancelEdit">Cancelar</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <footer class="container muted">
+    <p>Projeto de exemplo em PHP + HTML/JS. Banco SQLite. Sem dependências externas.</p>
+  </footer>
+</body>
+</html>
